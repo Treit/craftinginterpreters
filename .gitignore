@@ -3,7 +3,10 @@
 /build/
 /gen/
 clox
+clox.exe
 *.class
+*.exe
+*.o
 exercises/chapter01_introduction/3/linked_list
 .idea/
 
