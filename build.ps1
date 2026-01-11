@@ -28,9 +28,9 @@ try {
     # Copy to root
     Copy-Item build\clox.exe clox.exe -Force
     
-    Write-Host "  ✓ clox.exe built successfully" -ForegroundColor Green
+    Write-Host "  clox.exe built successfully" -ForegroundColor Green
 } catch {
-    Write-Host "  ✗ Failed to build clox: $_" -ForegroundColor Red
+    Write-Host "  Failed to build clox: $_" -ForegroundColor Red
     exit 1
 }
 
@@ -69,14 +69,14 @@ java -cp build\java com.craftinginterpreters.lox.Lox $args
 '@ | Out-File -Encoding UTF8 jlox.ps1
     }
     
-    Write-Host "  ✓ jlox built successfully" -ForegroundColor Green
+    Write-Host "  jlox built successfully" -ForegroundColor Green
 } catch {
-    Write-Host "  ✗ Failed to build jlox: $_" -ForegroundColor Red
+    Write-Host "  Failed to build jlox: $_" -ForegroundColor Red
     exit 1
 }
 
 Write-Host ""
-Write-Host "Build complete! 🎉" -ForegroundColor Cyan
+Write-Host "Build complete!" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "To run the interpreters:" -ForegroundColor White
 Write-Host "  .\clox.exe       - C interpreter" -ForegroundColor Gray

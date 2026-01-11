@@ -1,14 +1,10 @@
 # Building Crafting Interpreters on Windows
 
-This guide explains how to build the clox (C) and jlox (Java) interpreters from the Crafting Interpreters book on Windows using PowerShell.
+This guide covers building the clox (C) and jlox (Java) interpreters from the Crafting Interpreters book on Windows using PowerShell.
 
 ## Prerequisites
 
-You'll need the following tools installed:
-
-1. **Dart SDK** - For running build scripts
-2. **Java JDK** - For compiling Java code
-3. **MinGW-w64** - For C compiler (GCC)
+You need the Dart SDK for running build scripts, a Java JDK for compiling Java code, and MinGW-w64 for the GCC C compiler.
 
 ### Installing Required Tools with winget
 
@@ -42,11 +38,9 @@ mingw32-make --version
 
 ## Building the Interpreters
 
-### Step 1: Update Dart Dependencies
+### Update Dart Dependencies
 
-The repository uses older Dart dependencies that need updating for modern Dart versions.
-
-1. Edit `tool/pubspec.yaml` and update the environment and dependencies sections:
+The repository uses older Dart dependencies that need updating for modern Dart versions. Edit `tool/pubspec.yaml` and update the environment and dependencies sections:
 
 ```yaml
 environment:
@@ -66,7 +60,7 @@ dependencies:
   string_scanner: ^1.2.0
 ```
 
-2. Install dependencies:
+Then install dependencies:
 
 ```powershell
 cd tool
@@ -74,7 +68,7 @@ dart pub get
 cd ..
 ```
 
-### Step 2: Build clox (C Interpreter)
+### Build clox (C Interpreter)
 
 ```powershell
 # Create build directories
@@ -95,7 +89,7 @@ gcc -std=c99 -Wall -Wextra -Werror -Wno-unused-parameter -O3 -flto build\release
 Copy-Item build\clox.exe clox.exe
 ```
 
-### Step 3: Build jlox (Java Interpreter)
+### Build jlox (Java Interpreter)
 
 ```powershell
 # Create build directories
@@ -112,9 +106,9 @@ java -cp build\java com.craftinginterpreters.tool.GenerateAst java\com\craftingi
 javac -cp java -d build\java java\com\craftinginterpreters\lox\*.java
 ```
 
-### Step 4: Create jlox.ps1 Wrapper
+### Create jlox.ps1 Wrapper
 
-Create a file named `jlox.ps1` in the root directory with the following content:
+Create a file named `jlox.ps1` in the root directory with this content:
 
 ```powershell
 #!/usr/bin/env pwsh
@@ -196,24 +190,15 @@ print a + b;
 
 ## Notes
 
-- The original Makefile uses POSIX commands (`find`, `rm`, `printf`) that don't work directly on Windows
-- This guide provides manual build commands that work in PowerShell
-- Both interpreters are fully functional and pass their respective tests
-- For development, you may want to use WSL (Windows Subsystem for Linux) to use the original Makefile
+The original Makefile uses POSIX commands like `find`, `rm`, and `printf` that don't work directly on Windows. This guide provides manual build commands that work in PowerShell. Both interpreters are fully functional and pass their respective tests. For development work, you may want to use WSL (Windows Subsystem for Linux) to use the original Makefile.
 
 ## Troubleshooting
 
-**"javac is not recognized"**
-- Restart PowerShell or refresh PATH as shown above
-- Verify Java was installed: `winget list Oracle.JDK.23`
+If you get "javac is not recognized", restart PowerShell or refresh PATH as shown above. You can verify Java was installed with `winget list Oracle.JDK.23`.
 
-**"gcc is not recognized"**
-- Restart PowerShell or refresh PATH as shown above
-- Verify MinGW was installed: `winget list BrechtSanders.WinLibs.POSIX.UCRT`
+If you get "gcc is not recognized", restart PowerShell or refresh PATH as shown above. Verify MinGW was installed with `winget list BrechtSanders.WinLibs.POSIX.UCRT`.
 
-**Compilation errors in Dart tools**
-- Make sure you updated `tool/pubspec.yaml` with the newer dependency versions
-- Delete `tool/pubspec.lock` and run `dart pub get` again
+For compilation errors in the Dart tools, make sure you updated `tool/pubspec.yaml` with the newer dependency versions. You may need to delete `tool/pubspec.lock` and run `dart pub get` again.
 
 ## Quick Build Script
 
