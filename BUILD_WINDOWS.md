@@ -8,7 +8,7 @@ You need the Dart SDK for running build scripts, a Java JDK for compiling Java c
 
 ### Installing Required Tools with winget
 
-Open PowerShell as Administrator and run:
+Open PowerShell (pwsh.exe) and run:
 
 ```powershell
 # Install Dart SDK
@@ -21,11 +21,7 @@ winget install --id Oracle.JDK.23 --silent --accept-package-agreements --accept-
 winget install --id BrechtSanders.WinLibs.POSIX.UCRT --silent --accept-package-agreements --accept-source-agreements
 ```
 
-After installation, **restart your PowerShell terminal** or refresh the PATH:
-
-```powershell
-$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
-```
+After installation, **restart your PowerShell terminal** to ensure $env:PATH changes are picked up.
 
 ### Verify Installation
 
@@ -40,7 +36,7 @@ mingw32-make --version
 
 ### Update Dart Dependencies
 
-The repository uses older Dart dependencies that need updating for modern Dart versions. Edit `tool/pubspec.yaml` and update the environment and dependencies sections:
+The main repository, as of early 2026, uses older Dart dependencies that need updating for modern Dart versions. Edit `tool/pubspec.yaml` and update the environment and dependencies sections:
 
 ```yaml
 environment:
@@ -63,9 +59,9 @@ dependencies:
 Then install dependencies:
 
 ```powershell
-cd tool
+pushd tool
 dart pub get
-cd ..
+popd
 ```
 
 ### Build clox (C Interpreter)
@@ -114,16 +110,6 @@ Create a file named `jlox.ps1` in the root directory with this content:
 #!/usr/bin/env pwsh
 # Wrapper script to run jlox (Java interpreter)
 java -cp build\java com.craftinginterpreters.lox.Lox $args
-```
-
-Or create it with PowerShell:
-
-```powershell
-@'
-#!/usr/bin/env pwsh
-# Wrapper script to run jlox (Java interpreter)
-java -cp build\java com.craftinginterpreters.lox.Lox $args
-'@ | Out-File -Encoding UTF8 jlox.ps1
 ```
 
 ## Testing the Interpreters
@@ -189,20 +175,11 @@ print a + b;
 ```
 
 ## Notes
+The original Makefile uses POSIX commands like `find`, `rm`, and `printf` that don't work directly on Windows. This guide provides manual build commands that work in PowerShell.
 
-The original Makefile uses POSIX commands like `find`, `rm`, and `printf` that don't work directly on Windows. This guide provides manual build commands that work in PowerShell. Both interpreters are fully functional and pass their respective tests. For development work, you may want to use WSL (Windows Subsystem for Linux) to use the original Makefile.
+Another option is to use the original makefile by running under Windows Subsystem for Linux (WSL).
 
-## Troubleshooting
-
-If you get "javac is not recognized", restart PowerShell or refresh PATH as shown above. You can verify Java was installed with `winget list Oracle.JDK.23`.
-
-If you get "gcc is not recognized", restart PowerShell or refresh PATH as shown above. Verify MinGW was installed with `winget list BrechtSanders.WinLibs.POSIX.UCRT`.
-
-For compilation errors in the Dart tools, make sure you updated `tool/pubspec.yaml` with the newer dependency versions. You may need to delete `tool/pubspec.lock` and run `dart pub get` again.
-
-## Quick Build Script
-
-Save this as `build.ps1` for easy rebuilding:
+For convenience, we have collapsed the build instructions into a single helper script (build.ps1):
 
 ```powershell
 # Build clox
