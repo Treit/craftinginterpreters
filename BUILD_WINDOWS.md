@@ -107,7 +107,6 @@ javac -cp java -d build\java java\com\craftinginterpreters\lox\*.java
 Create a file named `jlox.ps1` in the root directory with this content:
 
 ```powershell
-#!/usr/bin/env pwsh
 # Wrapper script to run jlox (Java interpreter)
 java -cp build\java com.craftinginterpreters.lox.Lox $args
 ```
